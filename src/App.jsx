@@ -8,11 +8,22 @@ const schema = z.object({
   nombre: z
     .string()
     .min(3, { message: "El nombre debe tener mínimo 3 caracteres" })
+    // ^   → inicio de la cadena
+    // [a-zA-Z\s] → permite letras mayúsculas, minúsculas y espacios
+    // +   → uno o más caracteres de ese tipo
+    // $   → fin de la cadena
     .regex(/^[a-zA-Z\s]+$/, { message: "Solo se permiten letras y espacios" }),
 
   email: z
     .string()
     .email({ message: "Formato de correo inválido" })
+    // ^               → inicio de la cadena
+    // [\w.-]+         → uno o más caracteres alfanuméricos (\w), punto o guion
+    // @               → símbolo arroba obligatorio
+    // [a-zA-Z\d.-]+   → letras, números, punto o guion (dominio)
+    // \.              → punto literal
+    // [a-zA-Z]{2,}    → al menos 2 letras (ej: .com, .mx, .org)
+    // $               → fin de la cadena
     .regex(/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/, {
       message: "Correo no válido",
     }),
@@ -20,6 +31,12 @@ const schema = z.object({
   password: z
     .string()
     .min(6, { message: "Mínimo 6 caracteres" })
+    // ^                    → inicio de la cadena
+    // (?=.*[A-Z])          → al menos una mayúscula
+    // (?=.*[a-z])          → al menos una minúscula
+    // (?=.*\d)             → al menos un dígito
+    // (?=.*[@$!%*?&])      → al menos un carácter especial de este grupo
+    //                       (@ $ ! % * ? &)
     .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])/, {
       message:
         "Debe incluir mayúscula, minúscula, número y caracter especial (@$!%*?&)",
